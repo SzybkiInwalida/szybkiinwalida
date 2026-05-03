@@ -40,7 +40,7 @@ input.addEventListener("keypress", (event) => {
 
 function login() {
   var password = original || input.value;
-  signInWithEmailAndPassword(auth, "TWOJ_EMAIL", password)
+  signInWithEmailAndPassword(auth, "NUGERKNUGER", password)
     .then(() => {
       location.href = "/szybkiinwalida/home.html?" + params;
     })
