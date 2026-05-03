@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "html5-qrcode": "^2.3.8"
+  },
+  "dependencies": {
+    "firebase": "^12.12.1"
   }
 }

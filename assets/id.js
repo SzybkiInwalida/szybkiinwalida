@@ -1,35 +1,53 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC1rgHsmaeZ8TnZso9zykjDMCVzGuI3y58",
+  authDomain: "szybkiinwalida-a85c6.firebaseapp.com",
+  projectId: "szybkiinwalida-a85c6",
+  storageBucket: "szybkiinwalida-a85c6.firebasestorage.app",
+  messagingSenderId: "129001669260",
+  appId: "1:129001669260:web:45b322e121f46ae206b1a9"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 var params = new URLSearchParams(window.location.search);
 
-document.querySelector(".login").addEventListener("click", () => {
-  toHome();
-});
-
 var welcome = "Dzień dobry!";
-
 var date = new Date();
 if (date.getHours() >= 18) {
   welcome = "Dobry wieczór!";
 }
 document.querySelector(".welcome").innerHTML = welcome;
 
-document.querySelector(".login").addEventListener("click", () => {
-  toHome();
-});
-
-function toHome() {
-  location.href = "/szybkiinwalida/home.html?" + params;
-}
-
 var input = document.querySelector(".password_input");
-input.addEventListener("keypress", (event) => {
-  if (event.key === "Enter") {
-    document.activeElement.blur();
-  }
-});
-
 var dot = "•";
 var original = "";
 var eye = document.querySelector(".eye");
+
+document.querySelector(".login").addEventListener("click", () => {
+  login();
+});
+
+input.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    document.activeElement.blur();
+    login();
+  }
+});
+
+function login() {
+  var password = original || input.value;
+  signInWithEmailAndPassword(auth, "TWOJ_EMAIL", password)
+    .then(() => {
+      location.href = "/szybkiinwalida/home.html?" + params;
+    })
+    .catch(() => {
+      alert("Błędne hasło!");
+    });
+}
 
 input.addEventListener("input", () => {
   var value = input.value.toString();
@@ -52,11 +70,10 @@ input.addEventListener("input", () => {
         input.value = value.substring(0, value.length - 1) + dot;
       }
     });
-    console.log(original);
   }
 });
 
-function delay(time, length) {
+function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
