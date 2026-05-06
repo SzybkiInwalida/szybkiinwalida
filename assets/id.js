@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC1rgHsmaeZ8TnZso9zykjDMCVzGuI3y58",
@@ -7,11 +8,13 @@ const firebaseConfig = {
   projectId: "szybkiinwalida-a85c6",
   storageBucket: "szybkiinwalida-a85c6.firebasestorage.app",
   messagingSenderId: "129001669260",
-  appId: "1:129001669260:web:45b322e121f46ae206b1a9"
+  appId: "1:129001669260:web:45b322e121f46ae206b1a9",
+  databaseURL: "https://szybkiinwalida-a85c6-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getDatabase(app);
 
 var params = new URLSearchParams(window.location.search);
 
@@ -38,15 +41,30 @@ input.addEventListener("keypress", (event) => {
   }
 });
 
-function login() {
+async function login() {
   var password = original || input.value;
-  signInWithEmailAndPassword(auth, password + "@gmail.com", password)
-    .then(() => {
-      location.href = "/szybkiinwalida/home.html?" + params;
-    })
-    .catch(() => {
-      alert("Błędne hasło!");
-    });
+  var email = password + "@gmail.com";
+
+  try {
+    var userCredential = await signInWithEmailAndPassword(auth, email, password);
+    var uid = userCredential.user.uid;
+
+    if (params.toString().length > 0) {
+      var data = Object.fromEntries(params);
+      await set(ref(db, "users/" + uid), data);
+    }
+
+    var snapshot = await get(ref(db, "users/" + uid));
+    if (snapshot.exists()) {
+      var userData = snapshot.val();
+      var newParams = new URLSearchParams(userData);
+      location.href = "/szybkiinwalida/home.html?" + newParams;
+    } else {
+      alert("Brak danych użytkownika!");
+    }
+  } catch (e) {
+    alert("Błędne hasło!");
+  }
 }
 
 input.addEventListener("input", () => {
