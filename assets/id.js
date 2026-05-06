@@ -49,10 +49,11 @@ async function login() {
     var userCredential = await signInWithEmailAndPassword(auth, email, password);
     var uid = userCredential.user.uid;
 
-    if (params.toString().length > 0) {
-      var data = Object.fromEntries(params);
-      await set(ref(db, "users/" + uid), data);
-    }
+    var snapshot = await get(ref(db, "users/" + uid));
+if (!snapshot.exists() && params.toString().length > 0) {
+  var data = Object.fromEntries(params);
+  await set(ref(db, "users/" + uid), data);
+}
 
     var snapshot = await get(ref(db, "users/" + uid));
     if (snapshot.exists()) {
