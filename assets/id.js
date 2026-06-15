@@ -18,11 +18,9 @@ const db = getDatabase(app);
 
 var params = new URLSearchParams(window.location.search);
 
-// Powitanie
 var date = new Date();
 document.querySelector(".welcome").innerHTML = date.getHours() >= 18 ? "Dobry wieczór!" : "Dzień dobry!";
 
-// Logowanie
 document.querySelector(".login").addEventListener("click", login);
 document.querySelector(".password_input").addEventListener("keypress", (e) => {
   if (e.key === "Enter") login();
