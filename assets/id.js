@@ -18,31 +18,24 @@ const db = getDatabase(app);
 
 var params = new URLSearchParams(window.location.search);
 
-var welcome = "Dzień dobry!";
+// Powitanie
 var date = new Date();
-if (date.getHours() >= 18) {
-  welcome = "Dobry wieczór!";
-}
-document.querySelector(".welcome").innerHTML = welcome;
+document.querySelector(".welcome").innerHTML = date.getHours() >= 18 ? "Dobry wieczór!" : "Dzień dobry!";
 
-var input = document.querySelector(".password_input");
-var dot = "•";
-var original = "";
-var eye = document.querySelector(".eye");
-
-document.querySelector(".login").addEventListener("click", () => {
-  login();
-});
-
-input.addEventListener("keypress", (event) => {
-  if (event.key === "Enter") {
-    document.activeElement.blur();
-    login();
-  }
+// Logowanie
+document.querySelector(".login").addEventListener("click", login);
+document.querySelector(".password_input").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") login();
 });
 
 async function login() {
-  var password = original || input.value;
+  var password = document.querySelector(".password_input").value.trim();
+
+  if (!password) {
+    alert("Wpisz hasło!");
+    return;
+  }
+
   var email = password + "@gmail.com";
 
   try {
@@ -50,20 +43,20 @@ async function login() {
     var uid = userCredential.user.uid;
 
     var snapshot = await get(ref(db, "users/" + uid));
-if (!snapshot.exists() && params.toString().length > 0) {
-  var data = Object.fromEntries(params);
-  await set(ref(db, "users/" + uid), data);
-}
+    if (!snapshot.exists() && params.toString().length > 0) {
+      var data = Object.fromEntries(params);
+      await set(ref(db, "users/" + uid), data);
+    }
 
-    var snapshot = await get(ref(db, "users/" + uid));
+    snapshot = await get(ref(db, "users/" + uid));
     if (snapshot.exists()) {
-      var userData = snapshot.val();
-      var newParams = new URLSearchParams(userData);
+      var newParams = new URLSearchParams(snapshot.val());
       location.href = "/szybkiinwalida/home.html?" + newParams;
     } else {
       alert("Brak danych użytkownika!");
     }
   } catch (e) {
+    console.error(e.code, e.message);
     alert("Błędne hasło!");
   }
 }
