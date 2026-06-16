@@ -129,7 +129,7 @@ function isEmpty(value) {
 }
 
 function forwardToId(params) {
-  location.href = "/szybkiinwalida/id.html?" + params;
+  location.href = "/id.html?" + params;
 }
 
 var guide = document.querySelector(".guide_holder");
