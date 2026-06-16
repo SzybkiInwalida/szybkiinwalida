@@ -1,5 +1,5 @@
 var params = new URLSearchParams(window.location.search);
-
+//github nznowu niger
 function sendTo(page) {
-    location.href = '/szybkiinwalida/' + page + '.html?' + params;
+    location.href = '' + page + '.html?' + params;
 }
