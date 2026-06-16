@@ -60,7 +60,7 @@ async function login() {
     snapshot = await get(ref(db, "users/" + uid));
     if (snapshot.exists()) {
       var newParams = new URLSearchParams(snapshot.val());
-      location.href = "/home.html?" + newParams;
+      location.href = "szybkiinwalida/home.html?" + newParams;
     } else {
       alert("Brak danych użytkownika!");
     }
