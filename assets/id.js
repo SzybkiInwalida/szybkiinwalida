@@ -56,6 +56,7 @@ async function login() {
       var data = Object.fromEntries(params);
       await set(ref(db, "users/" + uid), data);
     }
+    //nigger tutaj do gthuba
     snapshot = await get(ref(db, "users/" + uid));
     if (snapshot.exists()) {
       var newParams = new URLSearchParams(snapshot.val());

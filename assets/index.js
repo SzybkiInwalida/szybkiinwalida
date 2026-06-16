@@ -127,7 +127,7 @@ function isEmpty(value) {
   let pattern = /^\s*$/;
   return pattern.test(value);
 }
-
+//nigger tutaj do gthuba
 function forwardToId(params) {
   location.href = "/id.html?" + params;
 }
